@@ -1,13 +1,26 @@
+
 body {
     display:flex;
     flex-direction: column;
     align-items: center;
+    font-family: "Montserrat", sans-serif;
+    background-color: rgb(235, 235, 229);
+    font-weight:100;
 }
 
+header {
+    font-size: 12vh;
+}
+
+#secondary {
+    font-size: 4vh;
+}
 #main-body {
     width: 100vw;
     display: flex;
-    justify-content:space-around;
+    justify-content:center;
+    gap:10vw;
+    flex-wrap: wrap;
 }
 
 .game-board {
@@ -20,7 +33,62 @@ body {
 .grid {
     display: flex;
     flex-wrap: wrap;
+    width: 398px;
+    height: 398px;
+    gap:2px;
+    border-style: solid;
+    border-width: 2px;
+    padding: 1px;
 }
+
+/* Color coding */
+.unit {
+
+    width: 36px;
+    height: 36px;
+    border-style: solid;
+    border-width: 1px;
+    background-color: #bce2f1 ;
+    border-radius: 3px;
+    border-color: #aaaaaa;
+    /* 20 lines, and 9 gaps*/
+}
+
+.ship {
+    background-color: rgba(153, 151, 147, 0.795);
+    
+    border-color: black;
+}
+
+.miss {
+    /* background-image: url('./images/splash.png');
+    background-size: contain; */
+    background-color: rgb(255, 255, 255);
+    display: flex; 
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+
+}
+
+.miss p {
+    border-radius: 100%;
+    background-color: black;
+    height: 5px;
+    width:5px;
+}
+
+.hit {
+    /* background-image: url('./images/flame.png');
+    background-size: contain; */
+    background-color: rgb(240, 124, 124);
+    display: flex; 
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+}
+
+
 
 
 /*Instruction Screen*/
@@ -64,3 +132,19 @@ body {
     text-decoration: none;
     cursor: pointer;
   }
+
+/* General*/ 
+button {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 900;
+    font-size: 4vh;
+    width: 5em;
+}
+
+#start-button {
+    margin-bottom: 20px;
+}
+
+#help-button {
+    font-size: 2vh;
+}

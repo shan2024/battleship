@@ -1,6 +1,6 @@
 //first create a frame that stays static throughout
 import { checkWinner, getPlayer, getComputer, getTurn, start, getGameStarted, getGameEnded , reset } from "./Game.js";
-
+//import flame from "./images/flame.png";
 //import { player, computer, turn} from "./Game.js";
 let selectedShip;
 
@@ -46,7 +46,7 @@ function createMain() {
     secondary.id = "secondary";
 
     let startBtn = document.createElement("button");
-    startBtn.innerHTML = "Start Game";
+    startBtn.innerHTML = "Start";
     startBtn.id = "start-button";
 
     let mainBody = document.createElement("div");
@@ -168,8 +168,8 @@ function createGrid(name) {
     let grid = document.createElement("div");
     grid.className = "grid";
     //for testing purposes
-    grid.style.width = "522px";
-    grid.style.height = "511px";
+    // grid.style.width = "522px";
+    // grid.style.height = "511px";
     //end
 
     for (let i = 0; i < 10; i++) {
@@ -177,11 +177,11 @@ function createGrid(name) {
             let unit = document.createElement("div");
 
             //for testing purposes only
-            unit.style.width = "50px";
-            unit.style.height = "50px";
-            unit.style.borderStyle = "solid";
-            unit.style.borderWidth = "1px";
-            unit.style.backgroundColor = "blue"
+            // unit.style.width = "50px";
+            // unit.style.height = "50px";
+            // unit.style.borderStyle = "solid";
+            // unit.style.borderWidth = "1px";
+            // unit.style.backgroundColor = "blue"
 
             //end
             unit.className = "unit";
@@ -218,7 +218,7 @@ function updateShips() {
     let shipUnits = document.querySelectorAll(".ship");
     Array.from(shipUnits).forEach( unit => {
         unit.classList.remove("ship");
-        unit.style.backgroundColor = "blue";
+        //unit.style.backgroundColor = "blue";
     })
 
     placeShips( getPlayer().gameBoard.ships, "player");
@@ -235,7 +235,7 @@ function placeShips(ships, name) {
             let unit = document.getElementById(position);
             unit.classList.add("ship");
             //Want to change color to blue if computer is playing
-            unit.style.backgroundColor = "black";
+            //unit.style.backgroundColor = "black";
         })
     ])
 }
@@ -246,7 +246,18 @@ function markHit(hits, name) {
 
         let position = hit[0] + "|" + hit[1] + "|" + name;
         let unit = document.getElementById(position);
-        unit.style.backgroundColor = "red";
+        unit.classList.add("hit");
+        while(unit.firstChild) {
+            unit.removeChild( unit.firstChild);
+        }
+        let sign = document.createElement("p");
+        sign.innerHTML = "&#10005;";
+
+        unit.appendChild(sign);
+        //let fire = new Image();
+        //fire.src = flame;
+        //unit.appendChild(fire);
+        //unit.style.backgroundColor = "red";
     })
 }
 function markMisses(misses, name) {
@@ -254,7 +265,15 @@ function markMisses(misses, name) {
         //console.log("miss: + " + miss);
         let position = miss[0] + "|" + miss[1] + "|" + name;
         let unit = document.getElementById(position);
-        unit.style.backgroundColor = "grey";
+        unit.classList.add("miss");
+        while(unit.firstChild) {
+            unit.removeChild( unit.firstChild);
+        }
+        let sign = document.createElement("p");
+        //sign.innerHTML = "&#183;";
+
+        unit.appendChild(sign);
+        //unit.style.backgroundColor = "grey";
     })
 }
 
@@ -265,13 +284,13 @@ function createHandlers() {
     let startBtn = document.getElementById("start-button");
     startBtn.addEventListener("click", ()=> {
         //multiple functions
-        if ( startBtn.innerHTML == "Start Game") {
+        if ( startBtn.innerHTML == "Start") {
             start();
-            startBtn.innerHTML = "Reset Game";
+            startBtn.innerHTML = "Reset";
 
         }
-        else if ( startBtn.innerHTML == "Reset Game") {
-            startBtn.innerHTML = "Start Game";
+        else if ( startBtn.innerHTML == "Reset") {
+            startBtn.innerHTML = "Start";
             let documentBody = document.querySelector("body");
             while(documentBody.firstChild) {
                 documentBody.removeChild(documentBody.firstChild);
