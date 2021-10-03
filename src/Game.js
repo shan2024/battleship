@@ -8,14 +8,15 @@ let turn = "player";
 let gameStarted = false;
 let gameEnded = false;
 
-let playerBoard = createGameBoard();
-let computerBoard = createGameBoard();
+let playerBoard;
+let computerBoard;
 
 let player;
 let computer;
 
 function startGame() {
-
+    playerBoard = createGameBoard();
+    computerBoard = createGameBoard();
     placePlayerShips();
     placeCompShips();
     player = createPlayer(playerBoard, computerBoard, false);
@@ -93,6 +94,13 @@ function start() {
     console.log("Game started!!!!")
 }
 
+function reset() {
+    gameStarted = false;
+    gameEnded = false;
+    turn = "player";
+    startGame();
+}
+
 function endGame() {
     gameEnded = true;
     console.log("Game Ended");
@@ -123,4 +131,4 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export { startGame, checkWinner, getTurn, getPlayer, getComputer, getGameStarted, start, getGameEnded };
+export { startGame, checkWinner, getTurn, getPlayer, getComputer, getGameStarted, start, getGameEnded, reset };

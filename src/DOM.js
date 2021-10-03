@@ -1,5 +1,5 @@
 //first create a frame that stays static throughout
-import { checkWinner, getPlayer, getComputer, getTurn, start, getGameStarted, getGameEnded } from "./Game.js";
+import { checkWinner, getPlayer, getComputer, getTurn, start, getGameStarted, getGameEnded , reset } from "./Game.js";
 
 //import { player, computer, turn} from "./Game.js";
 let selectedShip;
@@ -272,11 +272,13 @@ function createHandlers() {
         }
         else if ( startBtn.innerHTML == "Reset Game") {
             startBtn.innerHTML = "Start Game";
+            let documentBody = document.querySelector("body");
+            while(documentBody.firstChild) {
+                documentBody.removeChild(documentBody.firstChild);
+            }
             reset();
-        }
-        else if ( startBtn.innerHTML == "Play Again") {
-            startBtn.innerHTML = "Start Game";
-            reset();
+            let instructions = document.getElementById("instructions");
+            instructions.style.display = "none";
         }
     });
 
