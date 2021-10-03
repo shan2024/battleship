@@ -1,5 +1,5 @@
 //first create a frame that stays static throughout
-import { checkWinner, getPlayer, getComputer, getTurn } from "./Game.js";
+import { checkWinner, getPlayer, getComputer, getTurn, start, getGameStarted, getGameEnded } from "./Game.js";
 
 //import { player, computer, turn} from "./Game.js";
 let selectedShip;
@@ -11,6 +11,31 @@ function createMain() {
 
     //let content = document.createElement("div");
     //content.id = "content";
+
+    //instruction screen
+    createInstructions();
+    gameOverScreen();
+
+
+    // <div id="myModal" class="modal">
+
+    //     <div class="modal-content">
+    //         <span class="close">&times;</span>
+    //         <div class="form">
+    //             <p>Add New Book</p>
+    //             <input type="text" placeholder=" Title" name="title" id="myTitle" required>
+    //             <input type="text" placeholder=" Author" name="author" id="myAuthor" required>
+    //             <input type="number" placeholder=" Pages" name="pages" id="myPages" required>
+    //             <div class="read-container">
+    //                 <label for="read">Read/Unread</label>
+    //                 <input type="checkbox" name="readOrNot" value="read" id="myRead">
+
+    //             </div>
+    //             <button class="form-submit" type="button">Submit</button>
+    //         </div>
+    //     </div>
+
+    // </div>
 
     let header = document.createElement("header");
     header.innerHTML = "Battleship";
@@ -35,10 +60,15 @@ function createMain() {
     mainBody.appendChild(computerBoard);
 
 
+    let helpBtn = document.createElement("button");
+    helpBtn.innerHTML = "Help";
+    helpBtn.id = "help-button";
+
     documentBody.appendChild(header);
     documentBody.appendChild(secondary);
     documentBody.appendChild(startBtn);
     documentBody.appendChild(mainBody);
+    documentBody.appendChild(helpBtn);
 
     //documentBody.appendChild(content);
     update();
@@ -46,6 +76,57 @@ function createMain() {
     createHandlers();
 
 
+}
+
+function createInstructions() {
+    let documentBody = document.querySelector("body");
+
+    //let content = document.createElement("div");
+    //content.id = "content";
+
+    //instruction screen
+    let instructions = document.createElement("div");
+    instructions.id = "instructions";
+    instructions.className = "modal";
+
+    let instructionsContent = document.createElement("div");
+    instructionsContent.className = "modal-content";
+    instructionsContent.innerHTML = "Instructions";
+
+    let closeInstructionsBtn = document.createElement("span");
+    closeInstructionsBtn.className = "close";
+    closeInstructionsBtn.id = "close-instructions-button";
+    closeInstructionsBtn.innerHTML = "&times;";
+
+    instructionsContent.appendChild(closeInstructionsBtn);
+    instructions.appendChild( instructionsContent);
+    documentBody.appendChild(instructions);
+}
+
+function gameOverScreen() {
+    let documentBody = document.querySelector("body");
+
+    //let content = document.createElement("div");
+    //content.id = "content";
+
+    //instruction screen
+    let gameOver = document.createElement("div");
+    gameOver.id = "gameOver";
+    gameOver.className = "modal";
+    gameOver.style.display = "none";
+
+    let gameOverContent = document.createElement("div");
+    gameOverContent.className = "modal-content";
+    gameOverContent.innerHTML = "Game Over";
+
+    let gameOverBtn = document.createElement("span");
+    gameOverBtn.className = "close";
+    gameOverBtn.id = "close-game-button";
+    gameOverBtn.innerHTML = "&times;";
+
+    gameOverContent.appendChild(gameOverBtn);
+    gameOver.appendChild( gameOverContent);
+    documentBody.appendChild(gameOver);
 }
 
 function createGameBoard() {
@@ -119,11 +200,9 @@ function createGrid(name) {
 function update() {
 
     //place the ships
-    let playerShips = getPlayer().gameBoard.ships;
-    let computerShips = getComputer().gameBoard.ships;
 
-    placeShips(playerShips, "player");
-    placeShips(computerShips, "computer");
+    placeShips(getPlayer().gameBoard.ships, "player");
+    placeShips(getComputer().gameBoard.ships, "computer");
 
     //mark red the hit units
     markHit(getPlayer().gameBoard.hits, "player");
@@ -163,6 +242,8 @@ function placeShips(ships, name) {
 
 function markHit(hits, name) {
     hits.forEach(hit => {
+        //console.log("hit: + " + hit);
+
         let position = hit[0] + "|" + hit[1] + "|" + name;
         let unit = document.getElementById(position);
         unit.style.backgroundColor = "red";
@@ -170,6 +251,7 @@ function markHit(hits, name) {
 }
 function markMisses(misses, name) {
     misses.forEach(miss => {
+        //console.log("miss: + " + miss);
         let position = miss[0] + "|" + miss[1] + "|" + name;
         let unit = document.getElementById(position);
         unit.style.backgroundColor = "grey";
@@ -180,18 +262,36 @@ function markMisses(misses, name) {
 
 function createHandlers() {
 
+    let startBtn = document.getElementById("start-button");
+    startBtn.addEventListener("click", ()=> {
+        //multiple functions
+        if ( startBtn.innerHTML == "Start Game") {
+            start();
+            startBtn.innerHTML = "Reset Game";
+
+        }
+        else if ( startBtn.innerHTML == "Reset Game") {
+            startBtn.innerHTML = "Start Game";
+            reset();
+        }
+        else if ( startBtn.innerHTML == "Play Again") {
+            startBtn.innerHTML = "Start Game";
+            reset();
+        }
+    });
+
     let grid = document.getElementById("computer-board");
     grid.addEventListener("click", (e) => {
-        if (e.target.classList.contains("unit") && getTurn() == "player") {
+        if ( !getGameEnded() && getGameStarted() && e.target.classList.contains("unit") && getTurn() == "player") {
             attack(e.target.id);
-            update();
-            checkWinner();
+            // update();
+            // checkWinner();
         }
     })
 
     let playerGrid = document.getElementById("player-board");
     playerGrid.addEventListener("click", (e) => {
-        if (e.target.classList.contains("ship")) {
+        if (!getGameEnded() && !getGameStarted() && e.target.classList.contains("ship")) {
             shipClicked(e);
         }      
     })
@@ -208,7 +308,7 @@ function createHandlers() {
         if (event.defaultPrevented) {
           return; 
         }
-        if (typeof(selectedShip) != "undefined" ) {
+        if (typeof(selectedShip) != "undefined" && !getGameStarted()) {
             switch (event.key) {
                 case "ArrowDown":
                     getPlayer().gameBoard.move( selectedShip, "down");
@@ -223,15 +323,56 @@ function createHandlers() {
                     getPlayer().gameBoard.move( selectedShip, "right");
                   break;
                 case " ":
+                    getPlayer().gameBoard.rotate( selectedShip);
                   break;
                 default:
                   return; 
-              }
+            }
+            updateShips();
         }
-        updateShips();
         event.preventDefault();
       }, true);
 
+
+
+      instructionHandlers();
+
+}
+
+function instructionHandlers() {
+    let modal = document.getElementById("instructions");
+    let closeButton = document.getElementById("close-instructions-button");
+    let openButton = document.getElementById("help-button");
+
+    openButton.onclick = function () {
+        modal.style.display = "block";
+
+    }
+    closeButton.onclick = function () {
+        modal.style.display = "none";
+    }
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+}
+
+function gameOverHandler() {
+    let modal = document.getElementById("gameOver");
+    let closeButton = document.getElementById("close-game-button");
+
+    modal.style.display = "block";
+
+    closeButton.onclick = function () {
+        modal.style.display = "none";
+    }
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
 
 }
 
@@ -239,17 +380,22 @@ function createHandlers() {
 function attack(unitId) {
     let position = unitId.split("|");
     console.log("attack clicked!")
-    if (position[2] == "computer") {
-        let pos = [parseInt(position[0]), parseInt(position[1])];
+    let pos = [parseInt(position[0]), parseInt(position[1])];
+    if (position[2] == "computer" && !isArrayInArray( getPlayer().tries, pos ) ) {
         getPlayer().attackEnemy(pos);
+        update();
+        checkWinner();
         //console.log( player.enemyGameboard.misses)
     }
+
+    // update();
+    // checkWinner();
 
 }
 
 function shipClicked(e) {
     let position = e.target.id.split("|");
-    if (position[2] == "player") {
+    if (position[2] == "player" ) {
 
         let selectedPos = [parseInt(position[0]), parseInt(position[1])];
         getPlayer().gameBoard.ships.forEach(ship => {
@@ -268,5 +414,14 @@ function shipClicked(e) {
 
 }
 
+function isArrayInArray(arr, item){
+    var item_as_string = JSON.stringify(item);
+  
+    var contains = arr.some(function(ele){
+      return JSON.stringify(ele) === item_as_string;
+    });
+    return contains;
+}
 
-export { createMain, update };
+
+export { createMain, update, gameOverScreen, gameOverHandler };

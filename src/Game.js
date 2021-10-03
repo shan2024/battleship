@@ -2,9 +2,11 @@ import { createGameBoard } from "./Gameboard.js";
 import { createPlayer } from "./Player.js";
 import { createShip } from "./Ship.js";
 import { createMain } from "./DOM";
-import { update } from "./DOM";
+import { update, gameOverScreen, gameOverHandler } from "./DOM";
 
 let turn = "player";
+let gameStarted = false;
+let gameEnded = false;
 
 let playerBoard = createGameBoard();
 let computerBoard = createGameBoard();
@@ -72,11 +74,13 @@ async function checkWinner() {
     if (computerBoard.allSunk() || playerBoard.allSunk()) {
         turn = "computer";
         //end game
+        endGame();
+        //pop up  game ended screen;
 
     }
     else {
         turn = "computer";
-        await sleep(3000);
+        await sleep(0);
         computer.attackEnemy();
         update();
         turn = "player";
@@ -84,8 +88,15 @@ async function checkWinner() {
 
 }
 
-function endGame() {
+function start() {
+    gameStarted = true;
+    console.log("Game started!!!!")
+}
 
+function endGame() {
+    gameEnded = true;
+    console.log("Game Ended");
+    gameOverHandler();
 }
 
 function getTurn() {
@@ -100,8 +111,16 @@ function getComputer() {
     return computer;
 }
 
+function getGameStarted() {
+    return gameStarted;
+}
+
+function getGameEnded() {
+    return gameEnded;
+}
+
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export { startGame, checkWinner, getTurn, getPlayer, getComputer };
+export { startGame, checkWinner, getTurn, getPlayer, getComputer, getGameStarted, start, getGameEnded };
