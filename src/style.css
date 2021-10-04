@@ -79,7 +79,7 @@ header {
 .computer {
     background-color: #bce2f1 ;
     border-color: #aaaaaa;
-}
+}  
 
 .miss {
     /* background-image: url('./images/splash.png');
@@ -124,6 +124,8 @@ header {
 
 
 
+
+
 /*Instruction Screen*/
 #instructions-title {
     text-align: center;
@@ -146,8 +148,8 @@ header {
     text-align: center;
 }
 
-.description {
-}
+/* .description {
+} */
 .modal {
     display: block; /* Hidden by default */
     position: fixed; /* Stay in place */
@@ -171,7 +173,7 @@ header {
     width: 30vw;
     height: 70vh;
     border-radius: 10px;
-    overflow-y:auto
+    overflow-y:auto;
    
   }
 
@@ -209,5 +211,53 @@ button {
 .board-name {
     font-size: 4vh;
 }
+
+/*Indicator*/
+.indicator {
+    height:100px;
+    width:100px;
+    display: flex;
+    /* background-color: #bce2f1; */
+    flex-direction: column-reverse;
+    align-items: center;
+    justify-content: center;
+    border-style: solid;
+    border-radius: 1px;
+    border-width: 0px;
+
+    gap:5px;
+}
+
+.indicator-row {
+    display:flex;
+    gap:2px;
+}
+
+.indicator-unit {
+    height:10px;
+    width:10px;
+    background-color: #839b97;
+}
+
+#player-indicator {
+    margin-right: -9vw;
+}
+
+#computer-indicator {
+    margin-left: -9vw;
+}
+/* 
+.divider {
+    border-left: 5px none black;
+    height: 45vh;
+} */
+.modal-content img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+    max-height: 100%;
+}
+
 
 

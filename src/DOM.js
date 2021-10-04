@@ -2,6 +2,8 @@
 import { checkWinner, getPlayer, getComputer, getTurn, start, getGameStarted, getGameEnded , reset } from "./Game.js";
 //import flame from "./images/flame.png";
 //import { player, computer, turn} from "./Game.js";
+import clickImage from "./images/click.png";
+
 let selectedShip;
 
 function createMain() {
@@ -9,40 +11,16 @@ function createMain() {
 
     let documentBody = document.querySelector("body");
 
-    //let content = document.createElement("div");
-    //content.id = "content";
-
-    //instruction screen
+  
     createInstructions();
     gameOverScreen();
-
-
-    // <div id="myModal" class="modal">
-
-    //     <div class="modal-content">
-    //         <span class="close">&times;</span>
-    //         <div class="form">
-    //             <p>Add New Book</p>
-    //             <input type="text" placeholder=" Title" name="title" id="myTitle" required>
-    //             <input type="text" placeholder=" Author" name="author" id="myAuthor" required>
-    //             <input type="number" placeholder=" Pages" name="pages" id="myPages" required>
-    //             <div class="read-container">
-    //                 <label for="read">Read/Unread</label>
-    //                 <input type="checkbox" name="readOrNot" value="read" id="myRead">
-
-    //             </div>
-    //             <button class="form-submit" type="button">Submit</button>
-    //         </div>
-    //     </div>
-
-    // </div>
 
     let header = document.createElement("header");
     header.innerHTML = "Battleship";
     header.id = "header";
 
     let secondary = document.createElement("h1");
-    secondary.innerHTML = "Place your Ships!";
+    secondary.innerHTML = "Place Your Ships";
     secondary.id = "secondary";
 
     let startBtn = document.createElement("button");
@@ -52,12 +30,23 @@ function createMain() {
     let mainBody = document.createElement("div");
     mainBody.id = "main-body";
 
+    let playerIndicator = createIndicator("player");
+    let computerIndicator = createIndicator("computer");
+
     let playerBoard = createGameBoard();
+
 
     let computerBoard = createComputerBoard();
 
+    // let divider = document.createElement("div");
+    // divider.className = "divider";
+
+    mainBody.appendChild(playerIndicator);
     mainBody.appendChild(playerBoard);
+    //mainBody.appendChild(divider);
+
     mainBody.appendChild(computerBoard);
+    mainBody.appendChild(computerIndicator);
 
 
     let helpBtn = document.createElement("button");
@@ -120,14 +109,22 @@ function createInstructions() {
 
     let startingNewDescription = document.createElement("p");
     startingNewDescription.className = "description";
-    startingNewDescription.innerHTML = "Each player places the 5 ships somwhere on their board. A ship may be moved\
-    by clicking on the ship, then using the arrow keys to move it up, down, right, or left, and using the space bar to \
+    startingNewDescription.innerHTML = "Each player places the 5 ships somwhere on their board. A ship may be selected\
+    by clicking on the ship." 
+    
+    let startingNewDescription2 = document.createElement("p");
+    startingNewDescription2.className = "description";
+    startingNewDescription2.innerHTML =  "Then, use the arrow keys to move it up, down, right, or left, and use the space bar to \
     rotate the ship.<br/><br/> The ships can\
     only be placed vertically or horizontally. Diagonal placement is not allowed. No part of a ship may hang\
     off the edge of the board. Ships may not overlap each other. No ships may be placed on another ship. \
     Once the guessing begins, players may not move the ships. The 5 ships are:  Carrier (occupies 5 spaces),\
-    Battleship (4), Cruiser (3), Submarine (3), and Destroyer (2). <br/><br/> When you are ready, click \"start\" to begin\
+    Battleship (4), Cruiser (3), Destroyer (2), and Submarine (1). <br/><br/> When you are ready, click \"start\" to begin\
     the game."
+
+    let clickHelpImage = new Image();
+    clickHelpImage.src = clickImage;
+
 
     let playingGame = document.createElement("h4");
     playingGame.innerHTML = "Playing the Game";
@@ -148,6 +145,9 @@ function createInstructions() {
     instructionsContent.appendChild(gameObjectiveDescription);
     instructionsContent.appendChild(startingNewGame);
     instructionsContent.appendChild(startingNewDescription);
+    instructionsContent.appendChild(clickHelpImage);
+    instructionsContent.appendChild(startingNewDescription2);
+
     instructionsContent.appendChild(playingGame);
     instructionsContent.appendChild(playingGameDescription);
 
@@ -192,6 +192,29 @@ function gameOverScreen() {
 
     gameOver.appendChild( gameOverContent);
     documentBody.appendChild(gameOver);
+}
+
+function createIndicator(name) {
+    let indicator = document.createElement("div");
+    indicator.className = "indicator";
+    indicator.id = name + "-" + "indicator";
+
+    let numArray = [1,2,3,4,5];
+
+    numArray.forEach( num => {
+        let row = document.createElement("div");
+        row.className = "indicator-row";
+        for( let i = 0; i < num; i++) {
+            let unit = document.createElement("div");
+            unit.className = "indicator-unit";
+            unit.classList.add( num + "|"+ name );
+            row.appendChild(unit);
+        }
+        indicator.appendChild(row);
+    })
+
+    return indicator;
+
 }
 
 function createGameBoard() {
@@ -277,6 +300,40 @@ function update() {
     markHit(getComputer().gameBoard.hits, "computer");
     markMisses(getComputer().gameBoard.misses, "computer");
 
+    getPlayer().gameBoard.ships.forEach( ship=> {
+        if (ship.isSunk()) {
+            let length = ship.length;
+            let indicatorClass = length + "|" + "player";
+            Array.from( document.getElementsByClassName(indicatorClass) ).forEach( unit => {
+                unit.style.opacity = ".5";
+            })
+        }
+    })
+
+    getComputer().gameBoard.ships.forEach( ship=> {
+        if (ship.isSunk()) {
+            let length = ship.length;
+            let indicatorClass = length + "|" + "computer";
+            Array.from( document.getElementsByClassName(indicatorClass) ).forEach( unit => {
+                unit.style.opacity = ".5";
+            })
+        }
+    })
+
+}
+
+function updateOpacity() {
+    let playersBoard = document.getElementById("player-board");
+    let computersBoard = document.getElementById("computer-board");
+
+    if (getTurn() == "player") {
+        computersBoard.style.opacity = "1";        
+        playersBoard.style.opacity = ".5";        
+    }
+    else {
+        computersBoard.style.opacity = ".5";        
+        playersBoard.style.opacity = "1";   
+    }
 }
 
 function updateShips() {
@@ -483,6 +540,14 @@ function gameOverHandler() {
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
+
+            let newModal = document.getElementById("instructions");
+            window.onclick = function (event) {
+                if (event.target == newModal) {
+                    newModal.style.display = "none";
+                }
+            }
+
         }
     }
 
@@ -559,4 +624,4 @@ function isArrayInArray(arr, item){
 }
 
 
-export { createMain, update, gameOverScreen, gameOverHandler, errorHighlight, setSecondary };
+export { createMain, update, gameOverScreen, gameOverHandler, errorHighlight, setSecondary, updateOpacity };
