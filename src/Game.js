@@ -2,7 +2,7 @@ import { createGameBoard } from "./Gameboard.js";
 import { createPlayer } from "./Player.js";
 import { createShip } from "./Ship.js";
 import { createMain } from "./DOM";
-import { update, gameOverScreen, gameOverHandler } from "./DOM";
+import { update, gameOverScreen, gameOverHandler, setSecondary } from "./DOM";
 
 let turn = "player";
 let gameStarted = false;
@@ -44,10 +44,10 @@ function placePlayerShips() {
 
 function placeCompShips(){
 
-    //while( computerBoard.ships.length != 1) {
+    while( computerBoard.ships.length != 1) {
     computerBoard.placeShip(5, [Math.floor(Math.random() * 5), Math.floor(Math.random() * 5)], 
         Math.random() > .5 ? "horizontal" :"vertical");
-    //}
+    }
     while( computerBoard.ships.length != 2) {
 
     computerBoard.placeShip(4, [Math.floor(Math.random() * 6), Math.floor(Math.random() * 6)], 
@@ -73,6 +73,7 @@ function placeCompShips(){
 async function checkWinner() {
 
     if (computerBoard.allSunk() || playerBoard.allSunk()) {
+        setSecondary("Game Over");
         turn = "computer";
         //end game
         endGame();
@@ -81,16 +82,36 @@ async function checkWinner() {
     }
     else {
         turn = "computer";
+        setSecondary("Opponent's Turn");
+
         await sleep(0);
         computer.attackEnemy();
-        update();
-        turn = "player";
+
+        if (computerBoard.allSunk() || playerBoard.allSunk()) {
+            setSecondary("Game Over");
+            turn = "computer";
+            //end game
+            update();
+            endGame();
+            //pop up  game ended screen;
+    
+        }
+        else {
+            update();
+            turn = "player";
+            setSecondary("Your Turn");
+        }
+        // update();
+        // turn = "player";
+        // setSecondary("Your Turn");
+
     }
 
 }
 
 function start() {
     gameStarted = true;
+    setSecondary("Your Turn");
     console.log("Game started!!!!")
 }
 

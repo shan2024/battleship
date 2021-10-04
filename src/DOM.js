@@ -157,6 +157,7 @@ function createInstructions() {
     documentBody.appendChild(instructions);
 }
 
+
 function gameOverScreen() {
     let documentBody = document.querySelector("body");
 
@@ -171,7 +172,14 @@ function gameOverScreen() {
 
     let gameOverContent = document.createElement("div");
     gameOverContent.className = "modal-content";
-    gameOverContent.innerHTML = "Game Over";
+
+    let gameOverTitle = document.createElement("h1");
+    gameOverTitle.id = "game-over-title";
+    gameOverTitle.innerHTML = "Game Over";
+
+    let gameOverDescription = document.createElement("p");
+    gameOverDescription.id = "game-over-description";
+
 
     let gameOverBtn = document.createElement("span");
     gameOverBtn.className = "close";
@@ -179,6 +187,9 @@ function gameOverScreen() {
     gameOverBtn.innerHTML = "&times;";
 
     gameOverContent.appendChild(gameOverBtn);
+    gameOverContent.appendChild(gameOverTitle);
+    gameOverContent.appendChild(gameOverDescription);
+
     gameOver.appendChild( gameOverContent);
     documentBody.appendChild(gameOver);
 }
@@ -453,6 +464,17 @@ function gameOverHandler() {
     let modal = document.getElementById("gameOver");
     let closeButton = document.getElementById("close-game-button");
 
+    let description = document.getElementById("game-over-description");
+    let title = document.getElementById("game-over-title");
+    if( getComputer().gameBoard.allSunk()) {
+        title.innerHTML = "You Won"
+        description.innerHTML = "You sunk all the opponent's ships!<br/><br/>Click \"Reset\" to play again.";
+    }
+    else {
+        title.innerHTML = "You Lost"
+        description.innerHTML = "The opponent sunk all your ships!<br/><br/>Click \"Reset\" to play again.";
+    }
+
     modal.style.display = "block";
 
     closeButton.onclick = function () {
@@ -524,7 +546,7 @@ function errorHighlight( highlightShip) {
 }
 
 function setSecondary(text) {
-    document.querySelector("#secondary").innerHTML = text;
+    document.getElementById("secondary").innerHTML = text;
 }
 
 function isArrayInArray(arr, item){

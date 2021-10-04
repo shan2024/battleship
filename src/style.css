@@ -14,6 +14,10 @@ header {
 
 #secondary {
     font-size: 4vh;
+    border-style: solid;
+    border-width: 1px;
+    padding:10px;
+    background-color: #fdffa9;
 }
 #main-body {
     width: 100vw;
@@ -72,6 +76,11 @@ header {
     border-color: black;
 }
 
+.computer {
+    background-color: #bce2f1 ;
+    border-color: #aaaaaa;
+}
+
 .miss {
     /* background-image: url('./images/splash.png');
     background-size: contain; */
@@ -124,6 +133,17 @@ header {
     font-size: 1vw;
     font-family: "Raleway", sans-serif;
 
+}
+
+/* Game Over Screen*/
+#game-over-title{
+    text-align: center;
+    font-size: 4vw;
+}
+
+#game-over-description {
+    font-size: 2vw;
+    text-align: center;
 }
 
 .description {
