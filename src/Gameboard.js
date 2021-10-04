@@ -1,4 +1,5 @@
 import { createShip } from "./Ship";
+import {errorHighlight} from "./DOM.js";
 
 function createGameBoard() {
 
@@ -103,6 +104,9 @@ function createGameBoard() {
                 ship.move(direction);
                 console.log(this.ships);
             }
+            else {
+                errorHighlight(ship);
+            }
         },
         rotate( ship ) {
             let canRotate = true;
@@ -137,6 +141,9 @@ function createGameBoard() {
             if (canRotate) {
                 ship.rotate();
                 console.log(this.ships);
+            }
+            else {
+                errorHighlight(ship);
             }
         }
     }

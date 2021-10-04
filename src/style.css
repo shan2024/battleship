@@ -42,6 +42,18 @@ header {
 }
 
 /* Color coding */
+.selected {
+    opacity:.5;
+}
+
+.player.ship:hover {
+    opacity: .5;
+}
+
+.computer:hover {
+    opacity:.5;
+}
+
 .unit {
 
     width: 36px;
@@ -88,11 +100,34 @@ header {
     align-items: center;
 }
 
+.hit:hover {
+    opacity:1;
+}
+
+.miss:hover{
+    opacity:1;
+}
+
+.highlighted {
+    border-color: red;
+}
+
 
 
 
 /*Instruction Screen*/
+#instructions-title {
+    text-align: center;
+    font-size: 2vw;
+}
+.instructions-header {
+    font-size: 1vw;
+    font-family: "Raleway", sans-serif;
 
+}
+
+.description {
+}
 .modal {
     display: block; /* Hidden by default */
     position: fixed; /* Stay in place */
@@ -109,12 +144,14 @@ header {
 
   /* Modal Content */
   .modal-content {
-    background-color: #92e2ec;
+    background-color: #f4f5f5;
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 200px;
+    width: 30vw;
+    height: 70vh;
     border-radius: 10px;
+    overflow-y:auto
    
   }
 
@@ -137,7 +174,7 @@ header {
 button {
     font-family: "Montserrat", sans-serif;
     font-weight: 900;
-    font-size: 4vh;
+    font-size: 3vh;
     width: 5em;
 }
 
@@ -148,3 +185,9 @@ button {
 #help-button {
     font-size: 2vh;
 }
+
+.board-name {
+    font-size: 4vh;
+}
+
+
