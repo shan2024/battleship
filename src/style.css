@@ -259,5 +259,10 @@ button {
     max-height: 100%;
 }
 
-
-
+footer {
+    background-color: none;
+    height:5em;
+    display:flex;
+    align-items: center;
+    font-family: Montserrat, Helvetica, sans-serif;
+}

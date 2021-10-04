@@ -59,6 +59,11 @@ function createMain() {
     documentBody.appendChild(mainBody);
     documentBody.appendChild(helpBtn);
 
+    let footer = document.createElement("footer");
+    footer.innerHTML = "Created By Seulchan Han";
+    documentBody.appendChild(footer);
+
+
     //documentBody.appendChild(content);
     update();
 
