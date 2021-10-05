@@ -72,10 +72,13 @@ header {
 
 .ship {
     background-color: rgba(153, 151, 147, 0.795);
-    
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border-color: black;
 }
 
+/* Control for computer visibility */
 .computer {
     background-color: #bce2f1 ;
     border-color: #aaaaaa;
@@ -226,6 +229,7 @@ button {
     border-width: 0px;
 
     gap:5px;
+    margin-top: 50px;
 }
 
 .indicator-row {
@@ -245,6 +249,11 @@ button {
 
 #computer-indicator {
     margin-left: -9vw;
+}
+
+.display-shots {
+    font-size: 3vh;
+    margin-top: 0;
 }
 /* 
 .divider {

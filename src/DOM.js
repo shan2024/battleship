@@ -1,5 +1,5 @@
 //first create a frame that stays static throughout
-import { checkWinner, getPlayer, getComputer, getTurn, start, getGameStarted, getGameEnded , reset } from "./Game.js";
+import {getComputerShots, getPlayerShots, checkWinner, getPlayer, getComputer, getTurn, start, getGameStarted, getGameEnded , reset } from "./Game.js";
 //import flame from "./images/flame.png";
 //import { player, computer, turn} from "./Game.js";
 import clickImage from "./images/click.png";
@@ -26,6 +26,8 @@ function createMain() {
     let startBtn = document.createElement("button");
     startBtn.innerHTML = "Start";
     startBtn.id = "start-button";
+
+    
 
     let mainBody = document.createElement("div");
     mainBody.id = "main-body";
@@ -204,18 +206,20 @@ function createIndicator(name) {
     indicator.className = "indicator";
     indicator.id = name + "-" + "indicator";
 
-    let numArray = [1,2,3,4,5];
-
+    let numArray = [3,3,3,4];
+    let nameArray = ["submarine", "destroyer", "cruiser", "carrier"];
+    let index = 0;
     numArray.forEach( num => {
         let row = document.createElement("div");
         row.className = "indicator-row";
         for( let i = 0; i < num; i++) {
             let unit = document.createElement("div");
             unit.className = "indicator-unit";
-            unit.classList.add( num + "|"+ name );
+            unit.classList.add( num + "|"+ name+ "|" + nameArray[index] );
             row.appendChild(unit);
         }
         indicator.appendChild(row);
+        index++;
     })
 
     return indicator;
@@ -228,12 +232,18 @@ function createGameBoard() {
     playerBoard.className = "game-board";
     playerBoard.id = "player-board";
 
+    let playerShotsDisplay = document.createElement("p");
+    playerShotsDisplay.className = "display-shots";
+    playerShotsDisplay.id = "player-shots";
+    playerShotsDisplay.innerHTML = "Shots: 12";
+
     let grid = createGrid("player");
 
     let boardName = document.createElement("p");
     boardName.innerHTML = "Player";
     boardName.className = "board-name";
 
+    playerBoard.appendChild(playerShotsDisplay);
     playerBoard.appendChild(grid);
     playerBoard.appendChild(boardName);
 
@@ -245,11 +255,18 @@ function createComputerBoard() {
     computerBoard.className = "game-board";
     computerBoard.id = "computer-board";
 
+    let computerShotsDisplay = document.createElement("p");
+    computerShotsDisplay.className = "display-shots";
+    computerShotsDisplay.id = "computer-shots";
+    computerShotsDisplay.innerHTML = "Shots: 12";
+
     let grid = createGrid("computer");
 
     let boardName = document.createElement("p");
     boardName.innerHTML = "Computer";
     boardName.className = "board-name";
+
+    computerBoard.appendChild(computerShotsDisplay);
 
     computerBoard.appendChild(grid);
     computerBoard.appendChild(boardName);
@@ -308,7 +325,7 @@ function update() {
     getPlayer().gameBoard.ships.forEach( ship=> {
         if (ship.isSunk()) {
             let length = ship.length;
-            let indicatorClass = length + "|" + "player";
+            let indicatorClass = length + "|" + "player"+"|"+ship.name;
             Array.from( document.getElementsByClassName(indicatorClass) ).forEach( unit => {
                 unit.style.opacity = ".5";
             })
@@ -318,12 +335,28 @@ function update() {
     getComputer().gameBoard.ships.forEach( ship=> {
         if (ship.isSunk()) {
             let length = ship.length;
-            let indicatorClass = length + "|" + "computer";
+            let indicatorClass = length + "|" + "computer" +"|"+ship.name;
+            console.log(indicatorClass);
             Array.from( document.getElementsByClassName(indicatorClass) ).forEach( unit => {
                 unit.style.opacity = ".5";
             })
         }
     })
+
+    updateShotsDisplay();
+
+
+
+}
+
+function updateShotsDisplay() {
+    let playerDisplay = document.getElementById("player-shots");
+    let computerDisplay = document.getElementById("computer-shots");
+
+    computerDisplay.innerHTML = "Shots: " + getPlayerShots();
+    playerDisplay.innerHTML = "Shots: " + getComputerShots();
+
+
 
 }
 
@@ -347,6 +380,9 @@ function updateShips() {
     Array.from(shipUnits).forEach( unit => {
         unit.classList.remove("ship");
         unit.classList.remove("selected");
+        if ( unit.innerHTML == "1" || unit.innerHTML == "2" || unit.innerHTML == "3") {
+            unit.innerHTML = "";
+        }
         //unit.style.backgroundColor = "blue";
     })
 
@@ -365,6 +401,22 @@ function placeShips(ships, name) {
             unit.classList.add("ship");
             if (ship.selected ) {
                 unit.classList.add("selected");
+            }
+            if (name == "player" && !unit.firstChild) {
+                switch( ship.name){
+                    case "carrier" :
+                        unit.innerHTML = 3;
+                        break;
+                    case "cruiser":
+                        unit.innerHTML = 3;
+                        break;
+                    case "destroyer":
+                        unit.innerHTML = 2;
+                        break;
+                    case "submarine":
+                        unit.innerHTML = 1;
+                        break;
+                }
             }
             
             //Want to change color to blue if computer is playing

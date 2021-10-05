@@ -16,9 +16,9 @@ function createGameBoard() {
         ships : [],
         hits : [],
         misses : [],
-        placeShip( length, startPos, orientation ) {
+        placeShip( length, startPos, orientation, name ) {
             let blocking = false;
-            let ship = createShip( length, startPos, orientation );
+            let ship = createShip( length, startPos, orientation, name );
             this.ships.forEach( otherShip => {
                 otherShip.posArray.forEach( pos => {
                     if ( isArrayInArray(ship.posArray, pos) ) {
@@ -46,6 +46,8 @@ function createGameBoard() {
                 this.misses.push(position);
 
             }
+
+            return isHit;
             
             //position has now been hit
         }, 
@@ -66,16 +68,16 @@ function createGameBoard() {
             //console.log( ship)
             switch(direction) {
                 case "right":
-                    newShip = createShip( ship.length, [ship.posArray[0][0] +1, ship.posArray[0][1]], ship.orientation);
+                    newShip = createShip( ship.length, [ship.posArray[0][0] +1, ship.posArray[0][1]], ship.orientation, ship.name);
                     break;
                 case "left":
-                    newShip = createShip( ship.length, [ship.posArray[0][0] -1, ship.posArray[0][1] ], ship.orientation);
+                    newShip = createShip( ship.length, [ship.posArray[0][0] -1, ship.posArray[0][1] ], ship.orientation, ship.name);
                     break;
                 case "down":
-                    newShip = createShip( ship.length,[ship.posArray[0][0], ship.posArray[0][1] + 1], ship.orientation);
+                    newShip = createShip( ship.length,[ship.posArray[0][0], ship.posArray[0][1] + 1], ship.orientation, ship.name);
                     break;
                 case "up" :
-                    newShip = createShip( ship.length, [ship.posArray[0][0], ship.posArray[0][1] - 1] , ship.orientation);
+                    newShip = createShip( ship.length, [ship.posArray[0][0], ship.posArray[0][1] - 1] , ship.orientation, ship.name);
                     //console.log( newShip.posArray);
                     break;
             }
@@ -111,13 +113,34 @@ function createGameBoard() {
         rotate( ship ) {
             let canRotate = true;
             let newShip;
-            if ( ship.orientation == "horizontal") {
+            if ( ship.orientation == "1") {
                 //want to rotate to vertical
-                newShip = createShip( ship.length, ship.posArray[0], "vertical");
+                newShip = createShip( ship.length, ship.posArray[0], "2" , ship.name);
             }
-            else {
-                newShip = createShip( ship.length, ship.posArray[0], "horizontal");
+            else if ( ship.orientation == "2") {
+                newShip = createShip( ship.length, ship.posArray[0], "3", ship.name);
             }
+            else if ( ship.orientation == "3") {
+                newShip = createShip( ship.length, ship.posArray[0], "4", ship.name);
+            }
+            else if ( ship.orientation == "4") {
+                newShip = createShip( ship.length, ship.posArray[0], "5", ship.name);
+            }
+            else if ( ship.orientation == "5") {
+                newShip = createShip( ship.length, ship.posArray[0], "6", ship.name);
+            }
+            else if ( ship.orientation == "6") {
+                newShip = createShip( ship.length, ship.posArray[0], "7", ship.name);
+            }
+            else if ( ship.orientation == "7") {
+                newShip = createShip( ship.length, ship.posArray[0], "8", ship.name);
+            }
+            else if ( ship.orientation == "8") {
+                newShip = createShip( ship.length, ship.posArray[0], "1", ship.name);
+            }
+    
+            console.log( newShip);
+
 
             this.ships.forEach( otherShip => {
                 if (otherShip != ship) {
